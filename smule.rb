@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require "http"
 require "nokogiri"
 
@@ -12,25 +14,28 @@ class LinkConverter
 
   def parse_link
     document = Nokogiri::HTML(get_source)
-    document.at('meta[name="twitter:player:stream"]')['content']
+    link = document.at('meta[name="twitter:player:stream"]')['content']
+    title = document.at('meta[name="twitter:description"]')['content']
+    meta = {link: link, title: title.split(".")[0]}
   end
 end
 
 class AudioHandler
-  def initialize(link)
-    @link = link
+  def initialize(meta)
+    @title = meta[:title]
+    @link = meta[:link]
   end
 
   def get_audio
     audio = HTTP.follow.get(@link)
-    File.open('output.mp4', 'wb') do |f|
+    File.open(@title, 'wb') do |f|
       f.write(audio.body)
     end
   end
 
 end
 
-link = ""
+link = ARGV[0]
 s = LinkConverter.new(link)
 a = AudioHandler.new(s.parse_link)
 a.get_audio
