@@ -2,10 +2,12 @@
 A simple Smule Sing! command line media downloader.
 
 ## How to use
+0. Assuming you have Ruby SDK installed.
 1. Clone or download this repo.
 2. Extract the files to wherever you want, and change current directory to the directory where `smule.rb` was extracted.
-3. Make the `smule.rb` file executable by using `chmod a+x`.
-4. Download a song or video from Smule by using the following command on Terminal.
+3. Run `bundle`.
+4. Make the `smule.rb` file executable by using `chmod a+x`.
+5. Download a song or video from Smule by using the following command on Terminal.
 ```
 ./smule.rb <link to smule collab>
 ```
