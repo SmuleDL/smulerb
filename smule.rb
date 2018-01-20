@@ -16,14 +16,19 @@ class LinkConverter
     document = Nokogiri::HTML(get_source)
     link = document.at('meta[name="twitter:player:stream"]')['content']
     title = document.at('meta[name="twitter:description"]')['content']
-    meta = {link: link, title: title.split(".")[0]}
+		link
   end
+
+	def parse_title
+		document = Nokogiri::HTML(get_source)
+		document.at('meta[name="twitter:description"]')['content'].split("on Sing")[0].strip
+	end
 end
 
 class AudioHandler
-  def initialize(meta)
-    @title = meta[:title]
-    @link = meta[:link]
+  def initialize(link, title)
+    @title = title
+    @link = link
   end
 
   def get_audio
@@ -37,5 +42,5 @@ end
 
 link = ARGV[0]
 s = LinkConverter.new(link)
-a = AudioHandler.new(s.parse_link)
+a = AudioHandler.new(s.parse_link, s.parse_title)
 a.get_audio
