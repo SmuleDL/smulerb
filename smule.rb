@@ -15,8 +15,6 @@ class LinkConverter
   def parse_link
     document = Nokogiri::HTML(get_source)
     link = document.at('meta[name="twitter:player:stream"]')['content']
-    title = document.at('meta[name="twitter:description"]')['content']
-		link
   end
 
 	def parse_title
@@ -31,13 +29,16 @@ class AudioHandler
     @link = link
   end
 
+	def get_binary
+     HTTP.follow.get(@link) # get the binary blob file from link
+	end
+
   def get_audio
-    audio = HTTP.follow.get(@link)
+		audio = get_binary
     File.open(@title, 'wb') do |f|
       f.write(audio.body)
     end
   end
-
 end
 
 link = ARGV[0]
